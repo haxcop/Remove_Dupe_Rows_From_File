@@ -1,0 +1,18 @@
+﻿$file = #'your static file if you want to automate this' 
+$NewFile = #'Please enter your New File with .ext' 
+
+$hash = @{}                       # Define an empty hashtable
+Get-Content $file |               # Send the content of the file into the pipeline... 
+    ForEach-Object {              # For each object in the pipeline...
+    # note '%' is an alias of 'foreach-object'          
+    if ($hash.$_ -eq $null) {
+        # if that line is not a key in our hashtable...
+        # note -eq means 'equals'
+        # note $_ means 'the data we got from the pipe'
+        # note $null means NULL
+        $_                        # ... send that line further along the pipe
+    };
+    $hash.$_ = 1                  # Add that line to the hash (so we won't send it again)
+    # note that the value isn't important here,
+    # only the key. ;-)
+} > $NewFile  # finally... redirect the pipe into a new file. 
